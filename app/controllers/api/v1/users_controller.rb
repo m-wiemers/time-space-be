@@ -2,7 +2,8 @@ module Api
   module V1
     class UsersController < ApplicationController
       def index
-        render json: User.all, status: 200
+        users = User.all
+        render json: UserRepresenter.new(users).as_json, status: 200
       end
 
       def create
@@ -24,7 +25,7 @@ module Api
       private
 
       def user_params
-        params.require(:user).permit(:email, :name)
+        params.require(:user).permit(:email, :name, :corporation_id)
       end
     end
   end
