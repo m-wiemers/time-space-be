@@ -5,9 +5,26 @@ RSpec.describe "Corporations API", type: :request do
     let!(:corporations) { FactoryBot.create_list(:corporation, 2) }
     it 'returns all Corporations' do
       get '/api/v1/corporations'
-
+      
       expect(response).to have_http_status(:success)
       expect(response_body.size).to eq(2)
+    end
+    
+    it 'returns a subset of corporations based on pagination' do
+      get '/api/v1/corporations', params: { limit: 1 }
+      
+      expect(response).to have_http_status(:success)
+      expect(response_body.size).to eq(1)
+    end
+
+    it 'returns a subset of corporations based on limit and offset' do
+      get '/api/v1/corporations', params: { limit: 1, offset: 1 }
+
+      expect(response).to have_http_status(:success)
+      expect(response_body.size).to eq(1)
+      expect(response_body.first).to include(
+        'id' => 2,
+      )
     end
   end
 

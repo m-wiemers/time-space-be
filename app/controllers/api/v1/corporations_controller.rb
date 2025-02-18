@@ -2,7 +2,8 @@ module Api
   module V1
     class CorporationsController < ApplicationController
       def index
-        corporations = Corporation.all
+        corporations = Corporation.limit(params[:limit]).offset(params[:offset])
+
         render json: CorporationRepresenter.new(corporations).as_json, status: 200
       end
 
