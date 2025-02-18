@@ -7,7 +7,7 @@ describe 'Users API', type: :request do
       get '/api/v1/users'
 
       expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body).size).to eq(2)
+      expect(response_body.size).to eq(2)
     end
   end
 
@@ -21,8 +21,7 @@ describe 'Users API', type: :request do
       
       expect(response).to have_http_status(:created)
 
-      json_response = JSON.parse(response.body)
-      expect(json_response).to include(
+      expect(response_body).to include(
         'email' => User.last.email,
         'name' => User.last.name,
         'corporation_id' => nil
@@ -35,7 +34,7 @@ describe 'Users API', type: :request do
       }.to_not change { User.count }
       
       expect(response).to have_http_status(:unprocessable_content)
-      expect(JSON.parse(response.body)['email']).to include('has already been taken')
+      expect(response_body['email']).to include('has already been taken')
     end
 
     it 'create a new user with corporation_id' do
@@ -47,7 +46,7 @@ describe 'Users API', type: :request do
 
       expect(response).to have_http_status(:created)
 
-      expect(JSON.parse(response.body)).to include(
+      expect(response_body).to include(
         'email' => created_user.email,
         'name' => created_user.name,
         'corporation_id' => corporation.id

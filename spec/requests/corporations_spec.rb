@@ -7,7 +7,7 @@ RSpec.describe "Corporations API", type: :request do
       get '/api/v1/corporations'
 
       expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body).size).to eq(2)
+      expect(response_body.size).to eq(2)
     end
   end
 
@@ -20,11 +20,21 @@ RSpec.describe "Corporations API", type: :request do
       
       expect(response).to have_http_status(:created)
 
-      json_response = JSON.parse(response.body)
-      expect(json_response).to include(
+      expect(response_body).to include(
         'name' => Corporation.last.name,
         'location' => Corporation.last.location,
       )
+    end
+  end
+
+  describe 'DELETE /corporations/:id' do
+    let!(:corporation) { FactoryBot.create(:corporation) }
+    it 'delete a corporations' do
+      expect {
+       delete "/api/v1/corporations/#{corporation.id}"
+      }.to change { Corporation.count }.from(1).to(0)
+
+      expect(response).to have_http_status(:no_content)
     end
   end
 end
