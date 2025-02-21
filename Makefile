@@ -2,4 +2,13 @@ server:
 	bin/rails s
 
 bundle:
-	bin/rails bundle
+	bundle
+
+console:
+	bin/rails c
+
+migrate:
+	bin/rails db:migrate
+
+rollback:
+	bin/rails db:rollback
